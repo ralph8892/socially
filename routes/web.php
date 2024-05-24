@@ -5,7 +5,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 
 // User related routes
-Route::get('/', [ExampleController::class, "showCorrectHomepage"]);
+Route::get('/', [UserController::class, "showCorrectHomepage"]);
 Route::post('/register', [UserController::class, "register"]);
 Route::post('/login', [UserController::class, "login"]);
 Route::post('/logout', [UserController::class, "logout"]);
