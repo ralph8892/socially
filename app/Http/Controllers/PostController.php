@@ -11,7 +11,7 @@ class PostController extends Controller
         return view('single-post', ['post' => $post]);
     }
 
-    public function storeNewPost () {
+    public function storeNewPost (Request $request) {
         $incomingFields = $request->validate([
             'title' => 'required',
             'body' => 'required'
@@ -21,9 +21,9 @@ class PostController extends Controller
         $incomingFields['body'] = strip_tags($incomingFields['body']);
         $incomingFields['user_id'] = auth()->id();
 
-        Post::create($incomingFields);
+        $newPost = Post::create($incomingFields);
 
-        return "Hey there!";
+        return redirect("/post/{$newPost->id}")->with('success', 'New Blogpost Created');
     }
 
     public function showCreateForm () {
