@@ -1,6 +1,6 @@
 <x-layout>
     <div class="container py-md-5 container--narrow">
-        <form action="/post/{{$post->id}}" method="POST">
+        <form action="/post/{{ $post->id }}" method="POST">
             <p><small><strong><a href="/post/{{ $post->id }}">&laquo; Back to post permalink</a></strong></small></p>
             @csrf
             @method('PUT')

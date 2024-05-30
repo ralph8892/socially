@@ -23,5 +23,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Gate::policy(Post::class, PostPolicy::class);
+
+        Gate::define('visitAdminPages', function ($user) {
+            return $user->isAdmin === 1;
+        });
     }
 }
