@@ -31,8 +31,6 @@
 
         <div class="profile-slot-content">
             {{ $slot }}
-        </div>
-
-		
+        </div>		
     </div>
 </x-layout>
