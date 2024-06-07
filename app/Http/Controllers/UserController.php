@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Follow;
 use Illuminate\Http\Request;
-use Intervention\Image\Image;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Storage;
@@ -13,19 +15,28 @@ class UserController extends Controller
 {
     public function storeAvatar (Request $request) {
         $request->validate([
-            'avatar' => 'required|image|max:3000'
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:3000'
         ]);
 
         $user = auth()->user();
-        $filename = $user->id . '-' . uniqid() . '.jpg';
-        $imgData = Image::make($request->file('avatar'))->fit(120)->encode('jpg');
+        
+        $myAvatar = $request->file('avatar');
 
-        Storage::put('public/avatars/' . $filename, $imgData);
+        $filename = $user->id . '-' . uniqid() . '.' . $myAvatar->getClientOriginalExtension();
+
+        $myAvatar->move('storage/avatars', $filename);
+
 
         $oldAvatar = $user->avatar;
 
         $user->avatar = $filename;
         $user->save();
+
+        $manager = new ImageManager(Driver::class);
+        $img = $manager->read('storage/avatars/'.$filename);
+
+        $img->cover(120, 120);
+        $img->save('storage/avatars/thumbnails'.$filename);
 
         if ($oldAvatar != "/fallback-avatar.jpg") {
             Storage::delete(str_replace("/storage/", "public/", $oldAvatar));
