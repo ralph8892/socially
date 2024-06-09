@@ -21,8 +21,6 @@ class UserController extends Controller
 
         $user = auth()->user();
 
-        //File::delete(public_path('storage/avatars/thumbnails/'. $user->avatar));
-
         $myAvatar = $request->file('avatar');
 
         $filename = $user->id . '-' . uniqid() . '.' . $myAvatar->getClientOriginalExtension();
