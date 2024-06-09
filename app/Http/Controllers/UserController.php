@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Follow;
 use Illuminate\Http\Request;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\View;
+use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class UserController extends Controller
 {
@@ -19,27 +20,28 @@ class UserController extends Controller
         ]);
 
         $user = auth()->user();
-        
+
+        //File::delete(public_path('storage/avatars/thumbnails/'. $user->avatar));
+
         $myAvatar = $request->file('avatar');
 
         $filename = $user->id . '-' . uniqid() . '.' . $myAvatar->getClientOriginalExtension();
 
         $myAvatar->move('storage/avatars', $filename);
 
+        $manager = new ImageManager(Driver::class);
+        $img = $manager->read('storage/avatars/'.$filename);
+
+        $img->cover(120, 120);
+        $img->save('storage/avatars/'.$filename);
 
         $oldAvatar = $user->avatar;
 
         $user->avatar = $filename;
         $user->save();
 
-        $manager = new ImageManager(Driver::class);
-        $img = $manager->read('storage/avatars/'.$filename);
-
-        $img->cover(120, 120);
-        $img->save('storage/avatars/thumbnails'.$filename);
-
         if ($oldAvatar != "/fallback-avatar.jpg") {
-            Storage::delete(str_replace("/storage/", "public/", $oldAvatar));
+            Storage::delete(str_replace("/storage/", "public/", $oldAvatar));   
         }
 
         return back()->with("success", "Avatar successfully updated!");
