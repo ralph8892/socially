@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'mustBeLoggedIn' => \App\Http\Middleware\MustBeLoggedIn::class
         ]);
     })
+
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

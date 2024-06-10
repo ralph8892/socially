@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Follow;
+use App\Events\TestEventOne;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\File;
@@ -75,13 +76,14 @@ class UserController extends Controller
     }
 
     public function logout () {
+        event(new TestEventOne(['username' => auth()->user()->username, 'action' => 'logout']));
         auth()->logout();
         return redirect('/')->with('success', 'You are now logged out');
     }
 
     public function showCorrectHomepage () {
         if (auth()->check()) {
-            return view('homepage-feed', ['posts' => auth()->user()->feedPosts()->latest()->paginate(5)]);
+            return view('homepage-feed', ['posts' => auth()->user()->feedPosts()->latest()->paginate(3)]);
         } else {    
             return view('homepage');
         }
@@ -95,6 +97,7 @@ class UserController extends Controller
 
         if (auth()->attempt(['username' => $incomingFields['loginusername'], 'password' => $incomingFields['loginpassword']])) {
             $request->session()->regenerate();
+            event(new TestEventOne(['username' => auth()->user()->username, 'action' => 'login']));
             return redirect('/')->with('success', 'You are now logged in');
         } else {
             return redirect('/')->with('failure', 'Invalid login credentials');
