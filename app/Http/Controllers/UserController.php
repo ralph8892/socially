@@ -66,7 +66,7 @@ class UserController extends Controller
     }
 
     public function profileRaw (User $user) {
-        return response()->json(['theHTML' => view('profile-posts-only', ['post' => $user->posts()->latest()->get()])->render(), 'docTitle' => $user->username."'s Profile"]);
+        return response()->json(['theHTML' => view('profile-posts-only', ['posts' => $user->posts()->latest()->get()])->render(), 'docTitle' => $user->username."'s Profile"]);
     }
 
     public function profileFollowers (User $user) {
