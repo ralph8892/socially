@@ -64,7 +64,7 @@ class PostController extends Controller
 
 		return $newPost->id;
 
-        // return redirect("/post/{$newPost->id}")->with('success', 'New Blogpost Created');
+        return redirect("/post/{$newPost->id}")->with('success', 'New Blogpost Created');
     }
 
     public function showCreateForm () {
