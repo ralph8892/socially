@@ -22,7 +22,7 @@ class RecapEmail extends Mailable
      */
     public function __construct()
     {
-        Mail::to('test@google.com')->send(new SendRecapEmail());
+        Mail::to('testadmin1@google.com')->send(new SendRecapEmail());
     }
 
     public function __invoke()
