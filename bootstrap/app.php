@@ -1,6 +1,8 @@
 <?php
 
+use App\Mail\RecapEmail;
 use Illuminate\Foundation\Application;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
@@ -15,6 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'mustBeLoggedIn' => \App\Http\Middleware\MustBeLoggedIn::class
         ]);
+    })
+
+    ->withSchedule(function (Schedule $schedule) {
+        $schedule->call(new RecapEmail)->everyMinute();
     })
 
     ->withExceptions(function (Exceptions $exceptions) {
