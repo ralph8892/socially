@@ -21,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
     ->withSchedule(function (Schedule $schedule) {
         $schedule->call(new RecapEmail)->everyMinute();
+        // Run artisan command: php artisan schedule:work when on a dev environment
     })
 
     ->withExceptions(function (Exceptions $exceptions) {
