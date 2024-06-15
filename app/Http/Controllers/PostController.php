@@ -62,8 +62,6 @@ class PostController extends Controller
 
         dispatch(new SendNewPostEmail(['sendTo' => auth()->user()->email, 'name' => auth()->user()->username, 'title' => $newPost->title]));
 
-		return $newPost->id;
-
         return redirect("/post/{$newPost->id}")->with('success', 'New Blogpost Created');
     }
 
